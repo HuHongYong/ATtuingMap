@@ -78,5 +78,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ATtuingMap\ATtuingMap.csproj">
+      <Project>{7f579eeb-4b35-4515-ae96-d36deca0257f}</Project>
+      <Name>ATtuingMap</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
