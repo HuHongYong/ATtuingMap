@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ATtuingMap
@@ -31,8 +32,21 @@ namespace ATtuingMap
         public VectorStyle()
         {
 
-            PointColor = Brushes.Red;
+            PointColor = RandomBrushes();
             PointSize = 3f;
+        }
+        /// <summary>
+        /// 随机生成画笔颜色
+        /// </summary>
+        /// <returns></returns>
+        private Brush RandomBrushes() {
+            Thread.Sleep(20);
+            Random r = new Random((int)DateTime.Now.Ticks);
+            int red = r.Next(0, byte.MaxValue + 1);
+            int green = r.Next(0, byte.MaxValue + 1);
+            int blue = r.Next(0, byte.MaxValue + 1);
+            System.Drawing.Brush brush = new System.Drawing.SolidBrush(Color.FromArgb(red, green, blue));
+            return brush;
         }
     }
 }
