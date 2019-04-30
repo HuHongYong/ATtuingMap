@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ATtuingMap.Data
+namespace ATtuingMap
 {
     /// <summary>
     /// shp文件读取类
@@ -36,13 +36,24 @@ namespace ATtuingMap.Data
                 _Filename = value;
             }
         }
+        //文件路径
+        public BoundingBox Envelope
+        {
+            get { return _Envelope; }
+            set
+            {
+                _Envelope = value;
+            }
+        }
         /// <summary>
         /// 传入shp文件初始化类
         /// </summary>
         /// <param name="filename"></param>
         public ShapeFile(string filename)
         {
-
+            _Filename = filename;
+            ParseHeader();
+            PopulateIndexes();
         }
         /// <summary>
         /// 读取和解析.shp文件的文件头
@@ -91,8 +102,9 @@ namespace ATtuingMap.Data
                 offset += data_length; // 添加记录数据长度
                 offset += 8; //  +添加每条数据记录头的大小
             }
-            brShapeFile.Close();
-            fsShapeFile.Close();
+            _OffsetOfRecord = new int[_FeatureCount];
+            //brShapeFile.Close();
+            //fsShapeFile.Close();
         }
         /// <summary>
         /// 生成矢量文件索引
@@ -139,6 +151,18 @@ namespace ATtuingMap.Data
                 throw (new ApplicationException("Shapefile 文件类型 " + _ShapeType.ToString() + " 不支持"));
             }
 
+        }
+        /// <summary>
+        /// 获取所有的
+        /// </summary>
+        /// <returns></returns>
+        public List<Geometry> GetAllGeometry() {
+            List<Geometry> Geometrys = new List<Geometry>();
+            for (int i = 0; i < _OffsetOfRecord.Length; i++)
+            {
+                Geometrys.Add(ReadGeometry(i));
+            }
+            return Geometrys;
         }
 
         ///<summary>

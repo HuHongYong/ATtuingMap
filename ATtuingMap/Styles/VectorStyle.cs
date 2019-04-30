@@ -32,7 +32,7 @@ namespace ATtuingMap
         {
 
             PointColor = Brushes.Red;
-            PointSize = 10f;
+            PointSize = 3f;
         }
     }
 }

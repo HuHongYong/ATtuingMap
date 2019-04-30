@@ -44,5 +44,25 @@ namespace ATtuingMap
             _X = x;
             _Y = y;
         }
+        /// <summary>
+        /// 重写点的加法
+        /// </summary>
+        /// <param name="v1">点1</param>
+        /// <param name="v2">点2</param>
+        /// <returns></returns>
+        public static Point operator +(Point v1, Point v2)
+        {
+            return new Point(v1.X + v2.X, v1.Y + v2.Y);
+        }
+        /// <summary>
+        /// 重写点的乘法法 点*缩放
+        /// </summary>
+        /// <param name="m"></param>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        public static Point operator *(Point m, double d)
+        {
+            return new Point(m.X * d, m.Y * d);
+        }
     }
 }

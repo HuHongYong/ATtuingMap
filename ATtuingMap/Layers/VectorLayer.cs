@@ -13,13 +13,27 @@ namespace ATtuingMap
     public class VectorLayer
     {
         private VectorStyle _style;
+        private ShapeFile _dataSource;
         public  VectorStyle Style
         {
             get { return _style; }
             set { _style = value; }
         }
-        public VectorLayer() {
+        /// <summary>
+        /// 初始化化图层传入数据源
+        /// </summary>
+        /// <param name="dataSource"></param>
+        public VectorLayer(ShapeFile dataSource) {
+            _dataSource = dataSource;
             _style = new VectorStyle();
+        }
+        /// <summary>
+        /// 数据源
+        /// </summary>
+        public ShapeFile DataSource
+        {
+            get { return _dataSource; }
+            set { _dataSource = value; }
         }
         /// <summary>
         /// 渲染几何图形
@@ -38,6 +52,17 @@ namespace ATtuingMap
                 default:
 
                     break;
+            }
+        }
+        /// <summary>
+        /// 渲染
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="map"></param>
+        public void Render(Graphics g, Map map) {
+            foreach (var geo in DataSource.GetAllGeometry())
+            {
+                RenderGeometry(g,map, geo);
             }
         }
     }

@@ -64,6 +64,31 @@ namespace ATtuingMap
                 _Center = value;
             }
         }
+
+        public BoundingBox Envelope
+        {
+            get
+            {
+
+                Point ll = new Point(Center.X - Zoom * .5, Center.Y - MapHeight * .5);
+                Point ur = new Point(Center.X + Zoom * .5, Center.Y + MapHeight * .5);
+                PointF ptfll = Transform.WorldtoMap(ll, this);
+                ptfll = new PointF(Math.Abs(ptfll.X), Math.Abs(Size.Height - ptfll.Y));
+                if (!ptfll.IsEmpty)
+                {
+                    ll.X = ll.X - ptfll.X * PixelWidth;
+                    ll.Y = ll.Y - ptfll.Y * PixelHeight;
+                    ur.X = ur.X + ptfll.X * PixelWidth;
+                    ur.Y = ur.Y + ptfll.Y * PixelHeight;
+                }
+                return new BoundingBox(ll, ur);
+
+                //Point lb = new Point(Center.X - Zoom*.5, Center.Y - MapHeight*.5);
+                //Point rt = new Point(Center.X + Zoom*.5, Center.Y + MapHeight*.5);
+                //return new BoundingBox(lb, rt);
+            }
+        }
+
         /// <summary>
         /// 像素的长宽比
         /// </summary>
@@ -98,6 +123,9 @@ namespace ATtuingMap
         {
             get { return Zoom / Size.Width; }
         }
+
+        public List<VectorLayer> Layers { get; set; } = new
+             List<VectorLayer>();
         /// <summary>
         /// 在空间坐标系下的显示高度
         /// </summary>
@@ -108,6 +136,70 @@ namespace ATtuingMap
         public void Dispose()
         {
             throw new NotImplementedException();
+        }
+        /// <summary>
+        /// 获取渲染后的地图
+        /// </summary>
+        /// <returns></returns>
+        public Image GetMap()
+        {
+            Image img = new Bitmap(Size.Width, Size.Height);
+            Graphics g = Graphics.FromImage(img);
+            RenderMap(g);
+            g.Dispose();
+            return img;
+        }
+        /// <summary>
+        /// 渲染地图
+        /// </summary>
+        /// <param name="g"></param>
+        public void RenderMap(Graphics g)
+        {
+            foreach (var layer in Layers)
+            {
+                layer.Render(g, this);
+            }
+        }
+        /// <summary>
+        /// 获取最大外包矩形
+        /// </summary>
+        /// <returns></returns>
+        public BoundingBox GetExtents()
+        {
+            BoundingBox maxbb = null;
+            foreach (var layer in Layers)
+            {
+                if (maxbb != null)
+                {
+                    maxbb = layer.DataSource.Envelope == null ? maxbb : maxbb.Join(layer.DataSource.Envelope);
+                }
+                else
+                {
+                    maxbb = layer.DataSource.Envelope;
+                }
+            }
+            return maxbb;
+        }
+        /// <summary>
+        /// 全图显示
+        /// </summary>
+        public void ZoomToExtents()
+        {
+            ZoomToBox(GetExtents());
+        }
+        /// <summary>
+        /// 缩放带矩形可视范围
+        /// </summary>
+        /// <param name="bbox"></param>
+        public void ZoomToBox(BoundingBox bbox)
+        {
+            if (bbox != null)
+            {
+                _Zoom = bbox.Width; //Set the private center value so we only fire one MapOnViewChange event
+                if (Envelope.Height < bbox.Height)
+                    _Zoom *= bbox.Height / Envelope.Height;
+                Center = bbox.GetCentroid();
+            }
         }
     }
 }
