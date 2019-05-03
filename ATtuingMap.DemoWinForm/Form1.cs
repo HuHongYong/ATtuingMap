@@ -23,10 +23,13 @@ namespace ATtuingMap.DemoWinForm
         {
              myMap = new Map(pictureBox1.Size);
             ///目前第一版只支持点
-            ShapeFile shapeFile = new ShapeFile(@"G:\BaiduNetdiskDownload\GIS之家资源分享\OSM中国区矢量数据-20171218.shp\gis.osm_pois_free_1.shp");
+            ShapeFile shapeFile = new ShapeFile(@"GeoData\地级城市驻地.shp");
             VectorLayer layer = new VectorLayer(shapeFile);
-            ShapeFile shapeFile1 = new ShapeFile(@"G:\feiq\Recv Files\大邑县\地震台站.shp");
+            ShapeFile shapeFile1 = new ShapeFile(@"GeoData\省会城市.shp");
             VectorLayer layer1 = new VectorLayer(shapeFile1);
+            ShapeFile shapeFile2 = new ShapeFile(@"GeoData\县城驻地.shp");
+            VectorLayer layer2 = new VectorLayer(shapeFile2);
+            myMap.Layers.Add(layer2);
             myMap.Layers.Add(layer);
             myMap.Layers.Add(layer1);
             myMap.ZoomToExtents();

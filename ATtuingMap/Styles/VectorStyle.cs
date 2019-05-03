@@ -33,7 +33,7 @@ namespace ATtuingMap
         {
 
             PointColor = RandomBrushes();
-            PointSize = 3f;
+            PointSize = 5f;
         }
         /// <summary>
         /// 随机生成画笔颜色

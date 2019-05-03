@@ -72,15 +72,6 @@ namespace ATtuingMap
 
                 Point ll = new Point(Center.X - Zoom * .5, Center.Y - MapHeight * .5);
                 Point ur = new Point(Center.X + Zoom * .5, Center.Y + MapHeight * .5);
-                PointF ptfll = Transform.WorldtoMap(ll, this);
-                ptfll = new PointF(Math.Abs(ptfll.X), Math.Abs(Size.Height - ptfll.Y));
-                if (!ptfll.IsEmpty)
-                {
-                    ll.X = ll.X - ptfll.X * PixelWidth;
-                    ll.Y = ll.Y - ptfll.Y * PixelHeight;
-                    ur.X = ur.X + ptfll.X * PixelWidth;
-                    ur.Y = ur.Y + ptfll.Y * PixelHeight;
-                }
                 return new BoundingBox(ll, ur);
 
                 //Point lb = new Point(Center.X - Zoom*.5, Center.Y - MapHeight*.5);
@@ -195,7 +186,7 @@ namespace ATtuingMap
         {
             if (bbox != null)
             {
-                _Zoom = bbox.Width; //Set the private center value so we only fire one MapOnViewChange event
+                _Zoom = bbox.Width; 
                 if (Envelope.Height < bbox.Height)
                     _Zoom *= bbox.Height / Envelope.Height;
                 Center = bbox.GetCentroid();

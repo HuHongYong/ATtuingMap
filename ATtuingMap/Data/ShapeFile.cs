@@ -69,7 +69,7 @@ namespace ATtuingMap
                 //170328064的16进制为0x0a27，交换字节顺序后就是0x270a，十进制就是9994了
                 throw (new ApplicationException("无效的Shapefile文件 (.shp)"));
             }
-            //六个没有被使用的int32整数
+            //五个没有被使用的int32整数
             brShapeFile.BaseStream.Seek(24, 0);
             //获取文件长度，包括文件头
             _FileSize = 2 * SwapByteOrder(brShapeFile.ReadInt32());
