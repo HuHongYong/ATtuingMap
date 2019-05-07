@@ -112,7 +112,7 @@ namespace ATtuingMap.DemoWinForm
             //e.Delta常数，鼠标滚轮滚一下
             double scale = (e.Delta / 120.0);
             //缩放1.2倍
-            double scaleBase = 1 + (2.0 / 10 );
+            double scaleBase = 1 + (2.0 / 10);
             //重新设置zoom缩放等级
             myMap.Zoom *= Math.Pow(scaleBase, scale);
             //pictureBox1.Image = myMap.GetMap();
@@ -121,6 +121,21 @@ namespace ATtuingMap.DemoWinForm
             //修改鼠标缩放后的地图中心点
             myMap.Center = Transform.MapToWorld(new System.Drawing.Point(NewCenterX, NewCenterY), myMap);
             pictureBox1.Image = myMap.GetMap();
+        }
+        /// <summary>
+        /// 最大化，正常切换触发事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Minimized)
+            {
+                var x = myMap.Size.Width / (pictureBox1.Size.Width * 1.0);
+                myMap.Zoom *= x;
+                myMap.Size = pictureBox1.Size;
+                pictureBox1.Image = myMap.GetMap();
+            }
         }
     }
 }
