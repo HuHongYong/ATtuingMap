@@ -131,8 +131,6 @@ namespace ATtuingMap.DemoWinForm
         {
             if (this.WindowState != FormWindowState.Minimized)
             {
-                var x = myMap.Size.Width / (pictureBox1.Size.Width * 1.0);
-                myMap.Zoom *= x;
                 myMap.Size = pictureBox1.Size;
                 pictureBox1.Image = myMap.GetMap();
             }
